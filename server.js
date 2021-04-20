@@ -1,6 +1,11 @@
-const env = require('./env');
-process.env.client_id = env.client_id;
-process.env.client_secret = env.client_secret;
+try {
+  const env = require('./env');
+  process.env.client_id = env.client_id;
+  process.env.client_secret = env.client_secret;
+} catch (error) {
+  console.log(error);
+  console.log('YOU NEED ENVIRONMENT VARIABLES');
+}
 
 const Sequelize = require('sequelize');
 const {
