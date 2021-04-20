@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
+  </head>
+    <body>
+      <a href='https://github.com/login/oauth/authorize?client_id=<%= client_id %>'>Login to Github</a>
+      <button style='display: none'>Logout</button>
+      <pre>
+      </pre>
+      <script>
+        const button = document.querySelector('button');
+        button.addEventListener('click', () => {
+          window.localStorage.removeItem('token');
+          button.style.display = 'none';
+        })
+        const init = async() => {
+          const token = window.localStorage.getItem('token');
+          if(token){
+            try {
+              const response = await axios.get('/api/auth', {
+              headers: {
+                authorization: token
+              }
+            });
+            button.style.display = 'inherit';
+            button.innerHTML = `Logout ${response.data.username}`;
+            document.querySelector('pre').innerHTML = JSON.stringify(response.data.github, null, 2);
+            } catch (error) {
+              window.localStorage.removeItem('token');
+            }
+          }
+      }
+      init();
+      </script>
+    </body>
+
+</html>
